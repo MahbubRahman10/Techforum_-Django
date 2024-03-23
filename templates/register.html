@@ -1,0 +1,254 @@
+{% extends 'base.html' %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<style type="text/css">
+    label.col-form-label.requiredField{
+        color: #4c4c4c;
+    }
+    .invalid-feedback {
+        color: #F44949;
+    }
+    #hint_id_password1,#hint_id_password2 {
+         display: none;
+    }
+    .panel-body {
+        padding: 15px;
+        padding-right: 40px;
+    }
+</style>
+
+<div class="panel panel-default">
+    <div class="panel-heading">রেজিস্টার</div>
+    <div class="panel-body">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+        <form class="form-horizontal" role="form" method="POST" action="register">
+            {% csrf_token %}
+            {{ form|crispy }}
+            <div class="form-group">
+                <div class="col-md-6 col-md-offset-4">
+                    <button type="submit" class="btn btn-primary" >
+                        রেজিস্টার করুন
+                    </button>
+                </div>
+            </div>
+
+        </form>
+    </div>
+</div>
+
+
+
+<script type="text/javascript">
+
+
+
+    $(document).ready(function(){
+
+        $("#username").on("input",function (e)  {
+            e.preventDefault();
+            var username = $("#username").val();
+            $('.checkusername').html('<img src="/img/Loading.gif" width="60" />');
+
+            console.log(username)
+
+
+
+            if (username.length<=5) {
+
+                $(".checkusername").html("ইউজারনেম ৫ থেকে ১৫ অক্ষরের হতে হবে");
+                $("#username").css("border-color", "#a94442");
+                $(".checkusername").css("color", "#a94442");
+
+            }
+
+
+            else if(username.length > 5)
+            {
+
+               $.ajax({
+
+                url : "/username",
+                type: "GET",
+                data: {'username':username},
+                dataType: "JSON",
+                success: function (data) {
+
+
+                    var massage=data.searchResult;
+                    
+                    if(massage=='ইউজারনেম ব্যবহারযোগ্য'){
+
+                        $(".checkusername").html(massage);
+                        $("#username").css("border-color", "#3c763d");
+                        $(".checkusername").css("color", "#3c763d");
+                    }
+                    else{
+                        $(".checkusername").html(massage);
+                        $("#username").css("border-color", "#a94442");
+                        $(".checkusername").css("color", "#a94442");
+
+                    }
+
+                },
+                error: function (textStatus, errorThrown) {
+                    
+                }
+                
+            });    
+
+           }
+
+       });
+
+    });
+
+</script>
+
+
+
+<script type="text/javascript">
+
+
+
+    $(document).ready(function(){
+
+        $("#password").on("input",function (e)  {
+            e.preventDefault();
+            var password = $("#password").val();
+            $('.checkpassword').html('<img src="/img/Loading.gif" width="60" />');
+
+            console.log(password)
+            var regex = new RegExp("^(?=.*[A-Za-z])(?=.*[0-9])[A-Za-z0-9]{6,}$");
+
+
+            if (password.length<=5) {
+
+                $(".checkpassword").html("পাসওয়ার্ড অন্তত ৬ অক্ষরের মধ্যে থাকা আবশ্যক");
+                $("#password").css("border-color", "#a94442");
+                $(".checkpassword").css("color", "#a94442");
+
+            }
+
+
+            else if(regex.test(password))
+            {
+
+                $(".checkpassword").html("পাসওয়ার্ডে ঠিক আছে।");
+                $("#password").css("border-color", "#3c763d");
+                $(".checkpassword").css("color", "#3c763d");
+
+            }
+
+            else{
+
+                $(".checkpassword").html("পাসওয়ার্ডে অক্ষর এবং সংখ্যা অন্তর্ভুক্ত করা আবশ্যক");
+                $("#password").css("border-color", "#a94442");
+                $(".checkpassword").css("color", "#a94442");
+
+
+            }
+
+
+
+        });
+
+    });
+
+</script>
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+
+
+
+    $(document).ready(function(){
+
+        $("#password-confirm").on("input",function (e)  {
+            e.preventDefault();
+            var repassword = $("#password-confirm").val();
+
+            var password = $("#password").val();
+
+
+            if (repassword.length>=6) {
+
+
+                if(repassword==password)
+                {
+
+                    $(".checkrepassword").html("পাসওয়ার্ডে মিলেছে।।");
+                    $("#password-confirm").css("border-color", "#3c763d");
+                    $(".checkrepassword").css("color", "#3c763d");
+
+                }
+
+                else{
+
+                    $(".checkrepassword").html("পাসওয়ার্ডে মিলে নি।");
+                    $("#password-confirm").css("border-color", "#a94442");
+                    $(".checkrepassword").css("color", "#a94442");
+
+
+                }
+
+
+
+            }
+            else{
+
+
+            }
+
+
+
+        });
+
+    });
+
+</script>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<script type="text/javascript">
+
+ $("#button1").click(function(){
+
+
+   $('.reimg').each(function() {
+    $(this).attr("src", $(this).attr("src").split('?',1)+'?'+Date.now());
+
+});
+
+
+
+});
+
+</script>
+
+
+
+
+
+
+{% endblock %}

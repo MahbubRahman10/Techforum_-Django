@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+
+<style type="text/css">
+	#blogreply textarea{
+		width: 100%; 
+	}
+	label{
+		color: #4c4c4c;
+	}
+</style>
+	{% if messages %}
+	{% for message in messages %}
+	<div class="alert alert-{{ message.tags }}">{{ message }}</div>
+	{% endfor %}
+	{% endif %}
+	<div id='sst'>
+		<h2>{{  blog.title  }}</h2>
+		<span > {{ blog.datetime|date:'d F Y' }}, </span> <span style="color: blue; "> {{ blog.user }} </span>
+		<div id='image'>
+			{% if blog.image %}
+			<img src="{{ blog.image.url }}" height='350px' width='85%' style="margin-top: 30px;">
+			{% endif %}
+		</div><br /><br />
+		<div id='pt' style="color: #4c4c4c; font-size: 15px;">
+			 {{ blog.description|linebreaks|safe }}  <br/>
+		</div><br />
+	</div>
+	<hr/>
+
+	
+	<div class='comment'>
+		{% for blogcomment in blogcomments %}
+		<li class='comments' id="comment">
+			<h1>{{ blogcomment.name }} বলেছেন :</h1>
+			<h2>{{ blogcomment.datetime|date:'d F Y' }} </h2>
+			<h3>{{ blogcomment.description}}</h3>
+
+		</li>
+		{% endfor %}
+	</div>
+	
+
+	<div class="replys">
+		<div id="blogreply">
+			<div id="reply">
+				<h4>মতামত দিন</h4>
+				<p style="color: black;">আপনার ইমেইল ঠিকানা প্রচার করা হবে না। প্রয়োজনীয় ক্ষেত্রগুলি চিহ্নিত করা আছে *</p>
+			</div>
+			<h4 class="cancel-comment-reply-links" style="display: none" data-id="" value=""><a id="cancel-comment-reply-link">Cancel Reply</a></h4>
+			<form method="post" action="/blog/comment/{{ blog.id }}/" class="form">
+				{% csrf_token %}
+				{{ form|crispy }}
+				<button type="submit" name="btn-comment" class="btncomment" id="btncomment" role="button">মন্তব্য করুন</button>
+			</form>
+		</div>
+	</div>
+
+
+{% endblock %}

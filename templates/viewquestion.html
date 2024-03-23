@@ -1,0 +1,211 @@
+{% extends 'base.html' %}
+{% load static %}
+{% load crispy_forms_tags %}
+{% block content %}
+	
+	<style type="text/css">
+		a#ud {
+			padding: 5px;
+			font-size: 16px;
+		}
+		div#a {
+			display: inline-block;
+			width: 100%;
+		}
+		label.col-form-label.requiredField{
+			display: none;
+		}
+	</style>
+		
+	<ul class="breadcrumb" section="bc">
+		<li>
+			<a href="\">হোম</a>
+		</li>
+		<li>
+			<a href="/category/{{ question.category.id }}">{{ question.category.name }}</a>
+		</li>
+	</ul>
+	{% if messages %}
+	{% for message in messages %}
+	<div class="alert alert-{{ message.tags }}">{{ message }}</div>
+	{% endfor %}
+	{% endif %}
+	<div id='st'>									
+		<div id='sst'>
+			<h2>{{ question.title }}</h2>
+		</div>
+		<div id='sstt'>
+			<i class="fa fa-clock-o" aria-hidden="true"></i>  {{ question.datetime|date:'d F Y' }}, <i class="fa fa-user" aria-hidden="true" style="margin-left: 3px;"></i> <a href="/user/profile/{{ question.user.id }}"> {{ question.user }} </a>
+		</div>
+		<div id='ssttt'>
+			<p> {{ question.description|safe }} </p>
+		</div>
+
+		{% if bestreply  %}	
+			<div class="panel panel-default">
+				<div class="panel-heading"><span>সেরা উত্তর</span> <span style="float: right;">উত্তরটি নির্বাচিত করেছেন {{ question.user }}</span></div>
+				<div class="panel-body">
+					<li id="comments">
+						<div id='ssttt'>
+							<p> {{ bestreply.description }}</p>
+						</div>
+						<div id='sstt'>
+							<div id='c' style="float: right;">
+								{{ bestreply.datetime|date:'d F Y' }} <br> {{ bestreply.user }} এই উত্তরটি দিয়েছেন 	
+							</div>
+							<div class="alllikse"  style="float:  left;">
+								<!-- @if(Auth::user()) -->
+									<!-- <span class="d" data-id="{!! $comments->id !!}"> <a  id="color"><i class="fa fa-thumbs-o-up" aria-hidden="true" style="float:left; "></i></a><p class="likes"  id="blike{!! $comments->id !!}" value="{!! $comments->Like !!}">{!! $comments->Like!!}</p> </span> -->
+										<!-- @if(Auth::user()->id=="$question->user_id")	 -->
+											<!-- <span> <a href="\best\{!! $comments->id !!}"><i  @if($comments->best=="Yes") style="font-size: 20px; color:#21b384;" @endif  class="fa fa-check-circle-o" aria-hidden="true"></i> </a></span> -->
+										<!-- @endif -->
+								<!-- @endif -->
+							</div>
+						</div>
+					</li>	
+				</div>
+			</div>
+		{% endif %}
+		<a href="#comments" class="linkbtn answer">উত্তর দিন</a>
+		<hr>
+		<h3 style="text-align:  right;"><b>{{ question.num_reply }}</b> টি উত্তর</h3>
+		<hr>
+	</div>
+	
+
+
+	<div class="comment">
+		{% for reply in replies %}
+		<li id="comments" style="border-bottom: 1px solid #f5f5f5; margin-bottom:16px;  ">
+			<div class="mainreply">
+				<div class='description'>
+					<div id="a" class="maindescription" >
+						<div class="showreply">
+							<h5 id="descs{{ reply.id }}" style="display:block;">{{ reply.description }}</h5>
+							<div class="editsreplys{{ reply.id }}"  style="display: none;">
+								<form id="forms" method="POST" action="/reply/update/{{ reply.id }}/">
+									{% csrf_token %}
+									<textarea style=" margin-left:-100px;" cols="85" rows="7" class="form-control" id="editdescription{ reply.id }}" name="description">{{ reply.description }}</textarea>
+									<br>
+									<button class="btn btn-primary canceleditreply" data-id="{{ reply.id }}">বাতিল করুন</button>
+									<button type="submit" class="btns btn-success">সম্পাদান করুন</button>
+								</form>
+							</div>
+						</div>						
+						<div class="replyoption" style="margin-top: 30px; ; float: left;">
+							<div>
+								{% if user.id == reply.user.id %}
+								<a class="editreply" id="ud" data-id="{{ reply.id }}" ><i class="fa fa-pencil" aria-hidden="true"></i> </a>
+								<a href="\reply\delete\{{ reply.id }}" id="ud" class="deletedata"><i class="fa fa-trash-o" aria-hidden="true"></i></a>
+								{% endif %}	
+							</div>
+							<div style="margin-top: 10px;">
+								<span style="color: #4c4c4c; font-size: 14px;" class="replydata{{ reply.id }}">{{ reply.like }}</span><a  id="color" class="likeclass" data-id="{{ reply.id }}"> <i class="fa fa-thumbs-o-up" aria-hidden="true" style="float:left; "></i> </a>
+
+								{% if user.id == question.user.id %}
+								    <a href="\reply\best\{{ reply.id }}\" class="bestbutton" style="margin-left: 5px;">{% if reply.best == True %} <i style="font-size: 20px; color:#21b384;" class="fa fa-check-circle-o" aria-hidden="true"></i> {% else %}  <i class="fa fa-check-circle-o" aria-hidden="true"> </i> {% endif %}</a>
+								{% endif %}
+
+							</div>
+						</div>
+						<div class="replydetails" style="margin-top: 30px;color: #4c4c4c; float: right;">
+							{{ reply.datetime|date:'d F Y' }} <br> {{ reply.user}} এই উত্তরটি দিয়েছেন 
+						</div>
+					</div>
+				</div>
+			</div>
+		</li>
+		{% endfor %}
+	</div>
+
+
+	{% if user.is_authenticated %}
+		<form class="comment" action="\reply\{{ question.id }}\" method="post" enctype="multipart/form-data">
+			{% csrf_token %}
+			{{ form|crispy }}
+			<button type="submit" class="btn-info btn-lg" name="submit">উত্তর দিন</button>
+		</form>
+	{% else %}
+	<div id='pp'>
+		<h7>আপনি টেকফোরামের সদস্য না।<a href="\login">সদস্যতা নিন</a></h7>
+	</div>
+	{% endif %}	
+
+	
+
+
+	<script type="text/javascript" src="{% static '/js/tinymce/tinymce.min.js' %}"></script>
+	<script type="text/javascript">
+		tinymce.init({
+			selector : "textarea",
+			forced_root_block: false,
+			plugins : ["advlist autolink lists link image charmap print preview anchor", "searchreplace visualblocks code fullscreen", "insertdatetime media table contextmenu paste jbimages"],
+			toolbar : "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image jbimages",
+			language: 'bn_BD',   
+		});
+	</script>
+	
+	<script type="text/javascript">
+			
+		$(document).ready(function() {
+			$('.editreply').on('click', function() {
+
+				var id=$(this).attr("data-id");
+				var n=parseInt(id);
+				var display=$('.editsreplys'+n).css("display");
+				if (display=="none") {
+					$('.editsreplys' + n).fadeIn(800);
+					$('#descs' + n).css("display","none");
+				}
+				else{
+					$('#descs' + n).fadeIn(800);
+					$('.editsreplys' + n).css("display","none");
+				}
+			});
+
+			$('.canceleditreply').on('click', function(e) {	
+				e.preventDefault();
+				var id=$(this).attr("data-id");
+				var n=parseInt(id);
+				$('.editsreplys' + n).css("display","none");
+				$('#descs' + n).fadeIn(800);
+			});
+
+			$(document).ready(function(){
+				$(".deletedata").click(function(){
+					if (!confirm("Do you want to delete")){
+						return false;
+					}
+				});
+			});
+		});
+
+	</script>
+
+	<script type="text/javascript">
+		$(document).ready(function() { 
+			$('.likeclass').on('click', function() {	
+				var replyid=$(this).attr("data-id");
+				$.ajax({
+
+					url : "/reply/like",
+					type: "GET",
+					data: {'pk':replyid},
+					dataType: "JSON",
+					success: function (data){
+						$('.replydata' + replyid).html(data.like);
+					},
+					error:function(){
+
+						alert("error")
+					},
+				});
+			});
+		});
+	</script>
+
+
+	
+	
+
+{% endblock %}

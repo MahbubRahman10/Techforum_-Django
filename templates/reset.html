@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+
+<div class="panel panel-default">
+    <div class="panel-heading">Reset Password</div>
+    <div class="panel-body">
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <form  style="margin-left: 00px;" class="form-horizontal" role="form" method="POST">
+            {% csrf_token %}
+
+            <div class="form-group">
+                <label for="email" class="col-md-4 control-label">ই-মেইল : </label>
+
+                <div class="col-md-6">
+                    <input id="email" type="email" class="form-control" name="email" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-6 col-md-offset-4">
+                    <button type="submit" class="btn btn-primary">
+
+                        পাসওয়ার্ড রিসেট লিঙ্ক পাঠান
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+
+
+{% endblock %}

@@ -1,0 +1,22 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<style type="text/css">
+	#sides{
+		display: none;
+	}
+</style>
+
+<div class="panel panel-default">
+	<div class="panel-heading">404 Error</div>
+	<div class="panel-body" id="loginuser">
+	<img src="{%static '/img/error-img.png' %}">
+	<p style="font-size: 20px; margin-top: 20px;"> <span>You Requested the page that is no longer There.</p>
+	<a href="/" class="backhome">Back To Home</a>
+	</div>
+</div>
+
+
+{% endblock %}

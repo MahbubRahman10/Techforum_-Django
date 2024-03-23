@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Techforum</title>
+        {% include 'head.html' %})
+    </head>
+<body>
+    {% include 'nav.html' %}
+    <div class="container">
+        <div class="mahbub">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="card">
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li ><a href="/user/profile/{{ pk }}" aria-controls="home" role="tab" data-toggle="tab">প্রোফাইল</a></li>
+                            <li role="presentation" class="active"><a>প্রশ্নসমূহ</a></li>
+                            {% if user.is_authenticated  %}
+                            {% if user.id == pk  %}
+                            <li role="presentation"><a href="/user/profile/setting/{{ pk }}">প্রোফাইল সম্পাদনা করুন</a></li>
+                            {% endif %}
+                            {% endif %}
+                        </ul>
+						<!-- Tab panes -->
+
+						<div class="container">
+							<div class="col-md-12" id="questions">
+								<h4> {% if user.id == pk  %} আপনার {% else %} {{ users }}'s  {% endif %} প্রশ্নসমূহ</h4><hr>
+								<table class="tborder" cellpadding="6" cellspacing="1" border="0" width="100%" align="center">
+									{% if questions %}
+									{% for question in questions %}
+									<tbody id="coll" style="">										
+										<tr align="center" style="border-bottom: 1px solid white">	
+											<td class="main-link" colspan="0" align="left">		
+												<a class="title" href="\view\{{ question.id }}"> {{ question.title }} </a>
+												<p> {{ question.datetime|timesince }} ago </p>
+											</td>
+											{% if user.id == question.user_id %}
+											<td class="main-link" colspan="0" align="right" >
+												<a href="/question/edit/{{ question.id }}/" style="; font-style: italic; text-decoration: underline;">সম্পাদন করুন</a>
+											</td>	
+											{% endif %}
+										</tr> 									
+									</tbody>	
+									{% endfor %}  
+									{% else %}
+									    <h3>Not Available</h3>
+									{% endif %} 
+								</table>
+								<br><br><br><br>
+								<h4>{% if user.id == pk  %} আপনার {% else %} {{ users }}'s  {% endif %} উত্তরসমূহ</h4><hr>
+								
+								{% if replies %}
+								<table class="tborder" cellpadding="6" cellspacing="1" border="0" width="100%" align="center">
+									{% for reply in replies %}
+									<tbody id="coll" style="">										
+										<tr align="center"  style="border-bottom: 1px solid white">									
+											<td class="main-link" colspan="0" align="left">											
+												<a class="title" href="\view\{{ reply.forum_id }}"> {{ reply.description }} </a>
+												<p> {{ reply.datetime|timesince }} ago </p>
+											</td>
+											{% if user.id == reply.user_id %}
+											<td class="main-link" colspan="0" align="right">
+												<a href="/view/{{ reply.forum_id }}/" style="font-style: italic; text-decoration: underline;">সম্পাদন করুন</a>
+											</td>
+											
+											{% endif %}
+										</tr> 									
+									</tbody>
+									{% endfor %}
+								</table>
+
+								{% else %}
+								    <h3>Not Available</h3>
+								{% endif %}
+
+							</div>
+						</div>	
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	{% include 'footer.html' %}   
+    {% include 'script.html' %}
+</body>
+</html>

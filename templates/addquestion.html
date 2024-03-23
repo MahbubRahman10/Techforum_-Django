@@ -1,0 +1,57 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<style type="text/css">
+    .forumform tr{
+        color: #4c4c4c;
+    }
+    .forumform th,td{
+        padding: 15px 0px;
+    }
+</style>
+
+<div class="seper"></div>
+    <form method="post" action="/question">
+    {% csrf_token %}
+       <table class="forumform">
+           {{ form.as_table }}
+
+           
+           <tr>
+                <th></th>
+                <td> <button type="submit" class="btn btn-info btn-lg" name="submit"  role="button">সাবমিট</button> </td>
+            </tr>
+       </table>
+
+
+
+    </form>
+
+<!-- <script type="text/javascript">
+$(function(){
+    $('.form-inline').submit(function(event){
+        var varified=grecaptcha.getResponse();
+        if (varified.length===0) {
+            event.preventDefault();
+        }
+    });
+});
+</script>
+ -->
+
+<script type="text/javascript" src="{% static '/js/tinymce/tinymce.min.js' %}"></script>
+<script type="text/javascript">
+  tinymce.init({
+        selector : "textarea",
+         forced_root_block: false,
+        plugins : ["advlist autolink lists link image charmap print preview anchor", "searchreplace visualblocks code fullscreen", "insertdatetime media table contextmenu paste jbimages"],
+        toolbar : "insertfile undo redo | styleselect | bold italic | alignleft aligncenter alignright alignjustify | bullist numlist outdent indent | link image jbimages",
+        language: 'bn_BD',   
+    });
+</script>
+
+
+
+{% endblock %}

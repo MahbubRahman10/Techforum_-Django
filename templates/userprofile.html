@@ -1,0 +1,65 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Techforum</title>
+        {% include 'head.html' %}
+    </head>
+<body>
+    {% include 'nav.html' %}
+    <div class="container">
+        <div class="mahbub">
+            <div class="col-md-12">
+                <div class="row">
+                    <div class="card">
+                        <ul class="nav nav-tabs" role="tablist">
+                            <li role="presentation" class="active"><a href="#home" aria-controls="home" role="tab" data-toggle="tab">প্রোফাইল</a></li>
+                            <li ><a href="/user/question/{{ users.id }}">প্রশ্নসমূহ</a></li>
+                            {% if user.is_authenticated  %}
+                            {% if user.id == pk  %}
+                            <li role="presentation"><a href="/user/profile/setting/{{ users.id }}">প্রোফাইল সম্পাদনা করুন</a></li>
+                            {% endif %}
+                            {% endif %}
+                        </ul>
+                        <!-- Tab panes -->
+                        <div role="tabpanel" class="tab-pane active" id="home">
+                            <div class="container">
+                                <div class="col-md-12">
+                                    <div class="row">
+                                        <div class="col-md-4" id="userimage">
+                                            {% if users.userprofile.image %}
+                                            <img src="{{ users.userprofile.image.url }}" alt="Paris" height="280px" width="250px">
+                                            {% else %}
+                                            <img src="{% static '/img/paris.jpg' %}" alt="Paris" height="250px" width="250px">
+                                            {% endif %}
+                                        </div>
+                                        <div class="col-md-4" id="info">
+                                            <h2>{{ users.username }}</h2>
+                                            <p style="font-style: italic; margin-top:-10px; color: black; "> {{ users.userprofile.title }} </p>
+                                            <br>
+                                            <p style="margin-top:-10px; color: black; "> Full Name: {{ users.userprofile.firstname }} {{ users.userprofile.lastname }} </p> <br>
+                                            <p style="margin-top:-10px; color: black; "> Tags: {{ users.userprofile.tags }} </p> <br>
+                                            <p style="margin-top:-10px; color: black; "> About: {{ users.userprofile.about }} </p>
+                                            {% if user.is_authenticated  %}
+                                            {% if user.id == pk  %}
+                                            <a href="/user/profile/setting/{{ users.id }}" style="font-style: italic; color: blue; border-bottom: 1px solid black;"><h6 style="border-bottom: 1px solid  blue;display: inline;padding-bottom: 3px;">আপনার প্রোফাইল সম্পাদন করুন</h6></a>
+                                            {% endif %}
+                                            {% endif %}
+                                        </div>
+                                        <div class="col-md-4">
+                                             <h6><i class="fa fa-user" aria-hidden="true"></i> সদস্য হয়েছেন {{ users.date_joined|timesince }} ago </h6>
+                                             <h6><i class="fa fa-clock-o" aria-hidden="true"></i> সর্বশেষ অনলাইনে ছিলেন {{ users.last_login|timesince }}</h6>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div> 
+        </div>
+    </div>
+    {% include 'footer.html' %}   
+    {% include 'script.html' %}
+</body>
+</html>

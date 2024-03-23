@@ -1,0 +1,37 @@
+<div class="col-md-4">
+   	<div id='side'>
+		<div id='side_title'>
+			প্রাসঙ্গিক বিষয়
+		</div>						
+		<div id='blog_post'>
+			{% for siteblogpost in siteblogposts %}
+			<a href="/blog/view/{{ siteblogpost.id}}"> {{ siteblogpost.title }} </a><br><br>
+			{% endfor %}
+		</div>
+	</div>	
+
+	<div id='side'>
+	</div>
+	</div>
+
+
+
+
+	<div class="col-md-4">
+		<br>
+		<div id='sides'>
+			<div id='side_title'>
+				নির্বাচিত প্রশ্ন
+			</div>						
+			<div id='blog_post'>				
+				{% for sitequestion in sitequestions %}
+				<a href="/view/{{ sitequestion.id}}"> {{ sitequestion.title }} </a><br><br>
+				{% endfor %}
+			</div>
+
+		</div>	
+
+		<div id='side'>
+		</div>
+	</div>
+

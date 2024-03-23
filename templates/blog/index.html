@@ -1,0 +1,50 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<style type="text/css">
+	.postdescription{
+		color: #4c4c4c;
+		font-size: 14px;
+	}
+</style>
+	
+	
+	{% for blog in blogs %}
+		
+	<div>
+		<h3 style="color: #4c4c4c; font-size: 20px;"> <a href="/blog/view/{{ blog.id }}" style="font-size: 20px;">{{ blog.title }}</a> </h3>
+		<p style="font-size: 13px; color: #636262"> <span style="font-size: 11px; color: #636262">পোস্টটি করেছেন</span> {{ blog.user }} | {{ blog.datetime|date:'d F Y' }}</p>
+		<br>
+		<div class="postdescription"> {{ blog.description|linebreaks|truncatechars:200 }}... </div>
+		<br>
+
+		<a href="/blog/view/{{ blog.id }}" class="btn btn-primary">আর পড়ুন</a>
+	</div>
+
+	{% endfor %}
+	
+	<br><br><br>
+	<ul class="pagination">
+		{% if blogs.has_previous %}
+		<li><a href="?page={{ blogs.previous_page_number }}">&laquo;</a></li>
+		{% else %}
+		<li class="disabled"><span>&laquo;</span></li>
+		{% endif %}
+		{% for i in blogs.paginator.page_range %}
+		{% if blogs.number == i %}
+		<li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+		{% else %}
+		<li><a href="?page={{ i }}">{{ i }}</a></li>
+		{% endif %}
+		{% endfor %}
+		{% if blogs.has_next %}
+		<li><a href="?page={{ blogs.next_page_number }}">&raquo;</a></li>
+		{% else %}
+		<li class="disabled"><span>&raquo;</span></li>
+		{% endif %}
+	</ul>
+
+
+{% endblock %}

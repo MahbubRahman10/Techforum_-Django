@@ -1,0 +1,65 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+	<table class="tborder" cellpadding="6" cellspacing="1" border="0" width="100%" align="center">
+	<thead class="a">
+		<tr align="center">
+			  <td class="thead" width="45%" align="left"></td>
+			  <td class="thead" width="20%">বিভাগ</td>
+			  <td class="thead">উত্তর দিয়েছেন</td>
+			  <td class="thead">প্রশ্নটি দেখেছেন</td>
+		</tr>
+	<!-- <?php 
+		use Carbon\Carbon;
+		Carbon::setLocale('bn');
+		$english =array('0','1','2','3','4','5','6','7','8','9');
+		$bangla =array('০','১','২','৩','৪','৫','৬','৭','৮','৯'); 
+
+	?> -->
+
+	</thead>
+	{% for question in questions %} 
+	<tbody id="coll" style="">										
+			<tr align="center" class="abc">									
+				<td class="main-link" colspan="0" align="left">											
+				<a class="title" href="view/{{ question.id }}"> {{ question.title }} </a>
+					<p>প্রশ্নটি করেছেন {{ question.datetime|timesince  }} ago</p>
+				</td>
+				<td class="category">
+				    <a href="/category/{{ question.category.id }}">{{ question.category.name }}</a>
+				</td>
+				<td>
+					<a>{{ question.num_reply }}</a>
+				</td>
+				<td class="num_views">
+					<a>{{ question.visitor }}</a>
+				</td>													
+			</tr> 									
+	</tbody>
+	{% endfor %}
+	</table>
+	
+	<ul class="pagination">
+		{% if questions.has_previous %}
+		<li><a href="?page={{ questions.previous_page_number }}">&laquo;</a></li>
+		{% else %}
+		<li class="disabled"><span>&laquo;</span></li>
+		{% endif %}
+		{% for i in questions.paginator.page_range %}
+		{% if questions.number == i %}
+		<li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+		{% else %}
+		<li><a href="?page={{ i }}">{{ i }}</a></li>
+		{% endif %}
+		{% endfor %}
+		{% if questions.has_next %}
+		<li><a href="?page={{ questions.next_page_number }}">&raquo;</a></li>
+		{% else %}
+		<li class="disabled"><span>&raquo;</span></li>
+		{% endif %}
+	</ul>
+
+	
+
+{% endblock %}

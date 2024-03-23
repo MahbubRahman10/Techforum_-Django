@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+<div class="panel panel-default">
+    <div class="panel-heading">লগইন</div>
+    <div class="panel-body" id="loginuser">
+        <form class="form-horizontal" style="margin-left: 00px;" role="form" method="POST" action="login">
+            {% csrf_token %}
+            
+            {% if messages %}
+                {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">{{ message }}</div>
+                {% endfor %}
+            {% endif %}
+            <div class="social" style="margin-left: : 150px;">
+                <span>
+                    <a href="{% url 'social:begin' 'facebook' %}"> <div class="fb-icon-bg"><i class="fa fa-facebook" style="background: #354f88; font-size: 27px; padding: 3px 12px; margin-top: 2px; color: white;" ></i></div>
+                        <div class="fb-bg"></div>
+                    </a>
+                </span>
+                <span>
+                  <a href="{% url 'social:begin' 'twitter' %}"><div class="twi-icon-bg"> <i class="fa fa-twitter" style="background: #40a2d1; font-size: 27px; padding: 3px 8px; margin-top: 2px;  color: white;" > </i></div>
+                    <div class="twi-bg"></div> </a>
+                </span>
+            </div>
+            
+            <h4 class="soc" style="margin-left: 54%;">OR</h4><br>
+
+            <div class="form-group">
+                <label for="email" class="col-md-4 control-label">ইউজারনেইম:</label>
+                <div class="col-md-6">
+                    <input id="username" type="text" class="form-control" name="username" value="" required autofocus style="width: 90%;">
+                </div>
+            </div>
+           
+            <div class="form-group">
+                <label for="password" class="col-md-4 control-label">পাসওয়ার্ড:</label>
+                <div class="col-md-6">
+                    <input id="password" type="password" class="form-control" name="password" required style="width: 90%;">
+                </div>
+            </div>
+           
+            <div class="form-group">
+                <div class="col-md-6 col-md-offset-4">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="remember"> <span>আমাকে মনে রাখুন</span>
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <div class="col-md-8 col-md-offset-4">
+                    <button type="submit" class="btn btn-primary">
+                       লগইন করুন
+                   </button>
+                   <a class="btn btn-link" href="password_reset">
+                       পাসওয়ার্ড ভুলে গেছেন?
+                   </a>
+               </div>
+           </div>
+
+         </form>
+     </div>
+ </div>
+
+{% endblock %}
