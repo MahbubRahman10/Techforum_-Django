@@ -28,7 +28,7 @@ def viewquestion(request, pk):
 	except Reply.DoesNotExist:
 		bestreply = None
 	
-	form = ReplyForm()
+
 	if not question:
 		pass
 	else:
@@ -127,13 +127,13 @@ def bestreply(request, pk):
 
 @login_required(login_url='/login')
 def likereply(request):
-	pk = request.GET.get('pk')
-	reply = Reply.objects.get(id=pk)
-	user_like = Userlike.objects.filter(reply_id=reply.id, user_id=request.user)
+	id = request.GET.get('pk')
+	reply = Reply.objects.get(id=id)
+	like = Userlike.objects.filter(reply_id=reply.id, user_id=request.user)
 
 	response_data = {}
-	if user_like:
-		user_like.delete()
+	if like:
+		like.delete()
 		reply.like = reply.like-1
 		reply.save()
 	else: 

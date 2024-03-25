@@ -9,8 +9,6 @@
 		font-size: 14px;
 	}
 </style>
-	
-	
 	{% for blog in blogs %}
 		
 	<div>
@@ -19,7 +17,6 @@
 		<br>
 		<div class="postdescription"> {{ blog.description|linebreaks|truncatechars:200 }}... </div>
 		<br>
-
 		<a href="/blog/view/{{ blog.id }}" class="btn btn-primary">আর পড়ুন</a>
 	</div>
 
